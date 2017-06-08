@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='test',
-    version='0.1',
+    name='tes',
+    version='1.0',
     py_modules=find_packages(),
     include_package_data=True,
     install_requires=[
