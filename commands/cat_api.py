@@ -215,3 +215,18 @@ def segments(index,h):
         click.echo(e)
     else:
         click.echo(table.draw())
+
+@cat.command('shards', short_help='The shards command is the detailed view of what nodes contain which shards.')
+@click.option('--index', nargs=1, help=index_column_help)
+@click.option('-h', nargs=1, help=h_column_help)
+def shards(index,h):
+    try:
+        response = base.es.cat.shards(index=index, h=h)
+        if not response:
+            click.echo("No Shards present")
+            return
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table.draw())
