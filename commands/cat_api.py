@@ -6,6 +6,14 @@ format_column_help = '''
 The unit in which to display byte values, valid choices are: \'b\', \'k\', \'kb\', \'m\', \'mb\', \'g\', \'gb\', \'t\', \'tb\', \'p\', \'pb\'
 '''
 index_column_help = 'A comma-separated list of index names to limit the returned information'
+repository_column_help='''
+Name of the repository
+'''
+action_column_help = 'List of comma-separated actions to be returned'
+name_column_help = 'List of aliases names'
+node_column_help = 'A comma-separated list of node IDs or names to limit the returned information'
+detailed_column_help = 'Return detailed task information'
+
 @click.group()
 def cat():
     '''
@@ -31,25 +39,11 @@ def indices(index,h):
     else:
         click.echo(table.draw())
 
-@cat.command('aliases', short_help='Information about current aliases')
-@click.option('--name', nargs=1, help='A comma-separated list of alias names to return')
-@click.option('-h', nargs=1, help=h_column_help)
-def aliases(name,h):
-    '''aliases shows information about currently configured aliases to indices including filter and routing infos.'''
-    try:
-        response = base.es.cat.aliases(name,h=h)
-        if not response:
-            click.echo("No aliases as of now")
-            return
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table.draw())
+
 
 
 @cat.command('allocation', short_help='Information about shard allocation')
-@click.option('--node', nargs=1, help='A comma-separated list of node IDs or names to limit the returned information')
+@click.option('--node', nargs=1, help=node_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 @click.option('--format', default='mb', help=format_column_help)
 def allocation(node,format,h):
@@ -105,18 +99,6 @@ def health(h):
 
 @cat.command()
 @click.option('-h', nargs=1, help=h_column_help)
-def master(h):
-    try:
-        response = base.es.cat.master(h=h)
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table.draw())
-
-
-@cat.command()
-@click.option('-h', nargs=1, help=h_column_help)
 def nodeattrs(h):
     try:
         response = base.es.cat.nodeattrs(h=h)
@@ -144,34 +126,6 @@ def nodes(h):
     else:
         click.echo(table.draw())
 
-@cat.command()
-@click.option('-h', nargs=1, help=h_column_help)
-def pending_tasks(h):
-    try:
-        response = base.es.cat.pending_tasks(h=h)
-        if not response:
-            click.echo("No Pending Tasks as of now")
-            return
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table.draw())
-
-
-@cat.command()
-@click.option('-h', nargs=1, help=h_column_help)
-def plugins(h):
-    try:
-        response = base.es.cat.plugins(h=h)
-        if not response:
-            click.echo("No Plugins as of now")
-            return
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table.draw())
 
 
 @cat.command('recovery', short_help='recovery is a view of shard replication')
@@ -224,6 +178,22 @@ def shards(index,h):
         response = base.es.cat.shards(index=index, h=h)
         if not response:
             click.echo("No Shards present")
+            return
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table.draw())
+
+
+@cat.command()
+@click.option('--repository', nargs=1, help=repository_column_help)
+@click.option('-h', nargs=1, help=h_column_help)
+def snapshots(repository,h):
+    try:
+        response = base.es.cat.snapshots(repository=repository, h=h)
+        if not response:
+            click.echo("No snapshots present")
             return
         table = base.draw_table(response)
     except Exception as e:
