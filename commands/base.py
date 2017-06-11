@@ -3,8 +3,7 @@ from elasticsearch import Elasticsearch
 import click
 import json
 
-# es =  Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
-es =  Elasticsearch([{'host': 'segment-es.ttdev.in', 'port': 80, 'http_auth': 'ttuser:ttuser'}])
+es =  Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
 
 
 
