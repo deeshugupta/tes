@@ -2,6 +2,9 @@ from texttable import Texttable
 from elasticsearch import Elasticsearch
 import click
 import json
+import ConfigParser
+
+filename = "/etc/tes/sources.ini"
 
 es =  Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
 
