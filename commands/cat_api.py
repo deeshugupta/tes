@@ -37,7 +37,7 @@ def indices(index,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 
@@ -56,7 +56,7 @@ def allocation(node,format,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 @cat.command()
@@ -69,7 +69,7 @@ def count(index,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 @cat.command()
 @click.option('--fields', nargs=1)
@@ -82,7 +82,7 @@ def fielddata(fields,format,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 @cat.command()
@@ -94,7 +94,7 @@ def health(h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 @cat.command()
@@ -109,7 +109,7 @@ def nodeattrs(h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 @cat.command()
@@ -124,7 +124,7 @@ def nodes(h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 
@@ -139,7 +139,7 @@ def recovery(index,format,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 @cat.command()
 @click.option('-h', nargs=1, help=h_column_help)
@@ -153,7 +153,7 @@ def repositories(h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 @cat.command('segments', short_help='The segments command is the detailed view of Lucene segments per index.')
 @click.option('--index', nargs=1, help=index_column_help)
@@ -168,7 +168,7 @@ def segments(index,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 @cat.command('shards', short_help='The shards command is the detailed view of what nodes contain which shards.')
 @click.option('--index', nargs=1, help=index_column_help)
@@ -183,7 +183,7 @@ def shards(index,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)
 
 
 @cat.command()
@@ -199,4 +199,4 @@ def snapshots(repository,h):
     except Exception as e:
         click.echo(e)
     else:
-        click.echo(table.draw())
+        click.echo(table)

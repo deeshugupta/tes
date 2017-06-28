@@ -16,14 +16,15 @@ specify level: cluster, indices(Default: cluster). Shards level is not supported
 def health(level):
     try:
         response = base.es.cluster.health(level=level)
+        indices = None
         if(level == 'indices'):
             indices = response.pop('indices')
         table = base.draw_single_response_table(response)
-        click.echo(table.draw())
+        click.echo(table)
         if indices:
             for index in indices.keys():
                 click.echo("Index is :"+index)
-                click.echo(base.draw_single_response_table(indices[index]).draw())
+                click.echo(base.draw_single_response_table(indices[index]))
     except Exception as e:
         click.echo(e)
 

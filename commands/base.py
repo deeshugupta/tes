@@ -13,16 +13,21 @@ es =  Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
 
 def draw_table(response):
     table = Texttable(max_width=150)
+    if response.__class__.__name__ == 'unicode':
+        return response
+
     table.add_row(response[0].keys())
     for item in response:
         table.add_row(item.values())
-    return table
+    return table.draw()
 
 def draw_single_response_table(response):
     table = Texttable(max_width=150)
+    if response.__class__.__name__ == 'unicode':
+        return response
     table.add_row(response.keys())
     table.add_row(response.values())
-    return table
+    return table.draw()
 
 
 def pretty_print(response):
