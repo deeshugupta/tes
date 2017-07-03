@@ -3,9 +3,11 @@ import click
 
 h_column_help = 'A comma-separated list of column names'
 format_column_help = '''
-The unit in which to display byte values, valid choices are: \'b\', \'k\', \'kb\', \'m\', \'mb\', \'g\', \'gb\', \'t\', \'tb\', \'p\', \'pb\'
+The unit in which to display byte values, valid choices are:
+\'b\', \'k\', \'kb\', \'m\', \'mb\', \'g\', \'gb\', \'t\', \'tb\', \'p\', \'pb\'
 '''
-index_column_help = 'A comma-separated list of index names to limit the returned information'
+index_column_help = '''A comma-separated list of index
+names to limit the returned information'''
 repository_column_help='''
 Name of the repository
 '''
@@ -28,11 +30,15 @@ def cat():
 
 def indices(index,h):
     '''
-    The indices command provides a cross-section of each index. This information spans nodes.
-    We can tell quickly how many shards make up an index, the number of docs, deleted docs, primary store size, and total store size (all shards including replicas). All these exposed metrics come directly from Lucene APIs.
+    The indices command provides a cross-section of each index.
+    This information spans nodes.
+    We can tell quickly how many shards make up an index,
+    the number of docs, deleted docs, primary store size,
+    and total store size (all shards including replicas).
+    All these exposed metrics come directly from Lucene APIs.
     '''
     try:
-        response = base.es.cat.indices(index, h=h)
+        response = base.es.cat.indices(index, h=h, format='json')
         table = base.draw_table(response)
     except Exception as e:
         click.echo(e)
@@ -51,7 +57,7 @@ def allocation(node,format,h):
     Allocation provides a snapshot of how shards have located around the cluster and the state of disk usage
     '''
     try:
-        response = base.es.cat.allocation(node_id=node,bytes=format, h=h)
+        response = base.es.cat.allocation(node_id=node,bytes=format, h=h, format='json')
         table = base.draw_table(response)
     except Exception as e:
         click.echo(e)
@@ -77,7 +83,7 @@ def count(index,h):
 @click.option('-h', nargs=1, help=h_column_help)
 def fielddata(fields,format,h):
     try:
-        response = base.es.cat.fielddata(fields=fields,bytes=format,h=h)
+        response = base.es.cat.fielddata(fields=fields,bytes=format,h=h, format='json')
         table = base.draw_table(response)
     except Exception as e:
         click.echo(e)
@@ -89,7 +95,7 @@ def fielddata(fields,format,h):
 @click.option('-h', nargs=1, help=h_column_help)
 def health(h):
     try:
-        response = base.es.cat.health(h=h)
+        response = base.es.cat.health(h=h, format='json')
         table = base.draw_table(response)
     except Exception as e:
         click.echo(e)
@@ -101,7 +107,7 @@ def health(h):
 @click.option('-h', nargs=1, help=h_column_help)
 def nodeattrs(h):
     try:
-        response = base.es.cat.nodeattrs(h=h)
+        response = base.es.cat.nodeattrs(h=h, format='json')
         if not response:
             click.echo("No attributes as of now")
             return
@@ -116,7 +122,7 @@ def nodeattrs(h):
 @click.option('-h', nargs=1, help=h_column_help)
 def nodes(h):
     try:
-        response = base.es.cat.nodes(h=h)
+        response = base.es.cat.nodes(h=h, format='json')
         if not response:
             click.echo("No Nodes as of now")
             return
@@ -134,7 +140,7 @@ def nodes(h):
 @click.option('--format', default='mb', help=format_column_help)
 def recovery(index,format,h):
     try:
-        response = base.es.cat.recovery(index=index,bytes=format, h=h)
+        response = base.es.cat.recovery(index=index,bytes=format, h=h, format='json')
         table = base.draw_table(response)
     except Exception as e:
         click.echo(e)
@@ -145,7 +151,7 @@ def recovery(index,format,h):
 @click.option('-h', nargs=1, help=h_column_help)
 def repositories(h):
     try:
-        response = base.es.cat.repositories(h=h)
+        response = base.es.cat.repositories(h=h, format='json')
         if not response:
             click.echo("No Repositories as of now")
             return
@@ -160,7 +166,7 @@ def repositories(h):
 @click.option('-h', nargs=1, help=h_column_help)
 def segments(index,h):
     try:
-        response = base.es.cat.segments(index=index, h=h)
+        response = base.es.cat.segments(index=index, h=h, format='json')
         if not response:
             click.echo("No Segments present")
             return
@@ -175,7 +181,7 @@ def segments(index,h):
 @click.option('-h', nargs=1, help=h_column_help)
 def shards(index,h):
     try:
-        response = base.es.cat.shards(index=index, h=h)
+        response = base.es.cat.shards(index=index, h=h, format='json')
         if not response:
             click.echo("No Shards present")
             return
@@ -191,7 +197,7 @@ def shards(index,h):
 @click.option('-h', nargs=1, help=h_column_help)
 def snapshots(repository,h):
     try:
-        response = base.es.cat.snapshots(repository=repository, h=h)
+        response = base.es.cat.snapshots(repository=repository, h=h, format='json')
         if not response:
             click.echo("No snapshots present")
             return

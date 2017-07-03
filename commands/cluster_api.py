@@ -11,7 +11,8 @@ def cluster():
 
 @cluster.command()
 @click.option('--level', nargs=1, help='''
-specify level: cluster, indices(Default: cluster). Shards level is not supported as of now.
+specify level: cluster, indices(Default: cluster).
+Shards level is not supported as of now.
 ''')
 def health(level):
     try:
@@ -30,9 +31,14 @@ def health(level):
 
 
 @cluster.command()
-def state():
+@click.option('--index', nargs=1, help='''
+A comma-separated list of index names;
+use _all or empty string to perform the
+operation on all indices
+''')
+def state(index):
     try:
-        response = base.es.cluster.state()
+        response = base.es.cluster.state(index=index)
         # table = base.draw_table(response)
     except Exception as e:
         click.echo(e)

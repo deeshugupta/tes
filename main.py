@@ -16,7 +16,8 @@ def cli():
 def configure(name, host, port, auth, current):
     '''
     Configure is used to add various ES ports you are working on.
-    The user can add as many es ports as the one wants, but one will remain active at one point.
+    The user can add as many es ports as the one wants,
+    but one will remain active at one point.
     '''
     Config = ConfigParser.ConfigParser()
     if not os.path.exists(os.path.dirname(filename)):

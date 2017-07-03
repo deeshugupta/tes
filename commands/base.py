@@ -5,26 +5,26 @@ import json
 import ConfigParser
 
 filename = "/etc/tes/sources.ini"
+config = ConfigParser.ConfigParser()
+config.read(filename)
+host = config.get("Current","host")
+port = config.get("Current","port")
+auth = config.get("Current","auth")
 
-es =  Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
+es =  Elasticsearch(hosts=[{'host': host, 'port': port, 'auth': auth}])
 
 
 
 
 def draw_table(response):
     table = Texttable(max_width=150)
-    if response.__class__.__name__ == 'unicode':
-        return response
-
     table.add_row(response[0].keys())
     for item in response:
         table.add_row(item.values())
     return table.draw()
 
 def draw_single_response_table(response):
-    table = Texttable(max_width=150)
-    if response.__class__.__name__ == 'unicode':
-        return response
+    table = Texttable(max_width=140)
     table.add_row(response.keys())
     table.add_row(response.values())
     return table.draw()
