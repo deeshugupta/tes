@@ -54,3 +54,16 @@ def stats():
         click.echo(e)
     else:
         base.pretty_print(response)
+
+
+@cluster.command()
+def get_settings():
+    response = base.es.cluster.get_settings()
+    click.echo(response)
+    # try:
+    #     response = base.es.cluster.stats(human=True)
+    #     # table = base.draw_table(response)
+    # except Exception as e:
+    #     click.echo(e)
+    # else:
+    #     base.pretty_print(response)

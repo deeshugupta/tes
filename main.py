@@ -26,17 +26,36 @@ def configure(name, host, port, auth, current):
         except Exception as e:
             click.echo(e)
             return
-    cfgfile = open(filename,'a')
     section_name = None
     if(current.lower() == 'y'):
         section_name = 'Current'
+        change_current()
     else:
         section_name = name.capitalize()
+    cfgfile = open(filename,'a')
     Config.add_section(section_name)
     Config.set(section_name,'host',host)
     Config.set(section_name,'port',port)
     Config.set(section_name,'auth',auth)
     Config.set(section_name,'name',name.capitalize())
+    Config.write(cfgfile)
+    cfgfile.close()
+
+def change_current(current_name=None):
+    Config = ConfigParser.ConfigParser()
+    Config.read(filename)
+    sections = Config.sections()
+    for section in sections:
+        items = Config.items(section)
+        if current_name and Config.get(section, "name").lower() == current_name.lower():
+            name = "Current"
+        else:
+            name = Config.get(section,"name")
+        Config.remove_section(section)
+        Config.add_section(name.capitalize())
+        for option,value in items:
+            Config.set(name, option, value)
+    cfgfile = open(filename,'w')
     Config.write(cfgfile)
     cfgfile.close()
 
@@ -74,3 +93,8 @@ def show(name):
     options = Config.options(name)
     for option in options:
         click.echo('%s : %s' % (option.capitalize(), Config.get(name, option)))
+
+@cli.command()
+@click.argument('name')
+def use(name):
+    change_current(name)
