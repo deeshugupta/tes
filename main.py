@@ -2,7 +2,7 @@ import click
 import ConfigParser
 import os
 
-filename = "/etc/tes/sources.ini"
+filename = "/etc/.tes/sources.ini"
 
 @click.group()
 def cli():
@@ -40,7 +40,7 @@ def configure(name, host, port, auth, current):
     Config.write(cfgfile)
     cfgfile.close()
 
-@cli.command('list', short_help='list the names of all the configurations.')
+@cli.command('list', short_help='List the names of all the configurations.')
 def list():
     Config = ConfigParser.ConfigParser()
     try:
@@ -57,8 +57,9 @@ def list():
     click.echo("* is name of the current configuration")
 
 
-@cli.command()
-@click.option("--name")
+@cli.command('show', short_help='Shows the ES configuration')
+@click.option("--name", help='''Name of the ES host.
+If not provided it will show Current by Default''')
 def show(name):
     Config = ConfigParser.ConfigParser()
     try:

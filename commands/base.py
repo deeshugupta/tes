@@ -3,13 +3,18 @@ from elasticsearch import Elasticsearch
 import click
 import json
 import ConfigParser
+import sys
 
-filename = "/etc/tes/sources.ini"
+filename = "/etc/.tes/sources.ini"
 config = ConfigParser.ConfigParser()
 config.read(filename)
-host = config.get("Current","host")
-port = config.get("Current","port")
-auth = config.get("Current","auth")
+try:
+    host = config.get("Current","host")
+    port = config.get("Current","port")
+    auth = config.get("Current","auth")
+except ConfigParser.NoSectionError as e:
+    click.echo("Please configure atleast one elasticsearch host")
+    sys.exit()
 
 es =  Elasticsearch(hosts=[{'host': host, 'port': port, 'auth': auth}])
 
