@@ -1,6 +1,7 @@
 import base
 import click
 
+#COLUMN HELPS
 h_column_help = 'A comma-separated list of column names'
 format_column_help = '''
 The unit in which to display byte values, valid choices are:
@@ -16,6 +17,20 @@ name_column_help = 'List of aliases names'
 node_column_help = 'A comma-separated list of node IDs or names to limit the returned information'
 detailed_column_help = 'Return detailed task information'
 
+#COMMAND HELPS
+fielddata_help = '''Shows information about currently loaded fielddata on a per-node basis.'''
+indices_help = 'The indices command provides a cross-section of each index.'
+allocation_help = 'Information about shard allocation'
+count_help = 'Count of the documents stored in index'
+health_help = ''
+nodeattrs_help = ''
+nodes_help = ''
+recovery_help = 'recovery is a view of shard replication'
+repositories_help=''
+segments_help='The segments command is the detailed view of Lucene segments per index.'
+shards_help='The shards command is the detailed view of what nodes contain which shards.'
+snapshots_help=''
+
 @click.group()
 def cat():
     '''
@@ -24,7 +39,69 @@ def cat():
     pass
 
 
-@cat.command('indices', short_help='The indices command provides a cross-section of each index.')
+@cat.command('allocation', short_help=allocation_help)
+@click.option('--node', nargs=1, help=node_column_help)
+@click.option('-h', nargs=1, help=h_column_help)
+@click.option('--format', default='mb', help=format_column_help)
+def allocation(node,format,h):
+    '''
+    Allocation provides a snapshot of how shards have located around the
+    cluster and the state of disk usage
+    '''
+    try:
+        response = base.es.cat.allocation(node_id=node,bytes=format, h=h, format='json')
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table)
+
+
+@cat.command('count', short_help=count_help)
+@click.option('--index', nargs=1, help=index_column_help)
+@click.option('-h', nargs=1, help=h_column_help)
+def count(index,h):
+    '''
+    Gives count of the documents stored in Elasticsearch. If index option is
+    provided, it will provide document count of that index.
+    '''
+    try:
+        response = base.es.cat.count(index,h=h)
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table)
+
+@cat.command('fielddata', short_help=fielddata_help)
+@click.option('--fields', nargs=1, help='''A comma-separated list of fields to
+return the fielddata size
+''')
+@click.option('--format', default='mb', help=format_column_help)
+@click.option('-h', nargs=1, help=h_column_help)
+def fielddata(fields,format,h):
+    try:
+        response = base.es.cat.fielddata(fields=fields,bytes=format,h=h, format='json')
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table)
+
+
+@cat.command('health', short_help=health_help)
+@click.option('-h', nargs=1, help=h_column_help)
+def health(h):
+    try:
+        response = base.es.cat.health(h=h, format='json')
+        table = base.draw_table(response)
+    except Exception as e:
+        click.echo(e)
+    else:
+        click.echo(table)
+
+
+@cat.command('indices', short_help= indices_help)
 @click.option('--index', nargs=1, help=index_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 
@@ -48,62 +125,7 @@ def indices(index,h):
 
 
 
-@cat.command('allocation', short_help='Information about shard allocation')
-@click.option('--node', nargs=1, help=node_column_help)
-@click.option('-h', nargs=1, help=h_column_help)
-@click.option('--format', default='mb', help=format_column_help)
-def allocation(node,format,h):
-    '''
-    Allocation provides a snapshot of how shards have located around the cluster and the state of disk usage
-    '''
-    try:
-        response = base.es.cat.allocation(node_id=node,bytes=format, h=h, format='json')
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table)
-
-
-@cat.command()
-@click.option('--index', nargs=1)
-@click.option('-h', nargs=1, help=h_column_help)
-def count(index,h):
-    try:
-        response = base.es.cat.count(index,h=h)
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table)
-
-@cat.command()
-@click.option('--fields', nargs=1)
-@click.option('--format', default='mb')
-@click.option('-h', nargs=1, help=h_column_help)
-def fielddata(fields,format,h):
-    try:
-        response = base.es.cat.fielddata(fields=fields,bytes=format,h=h, format='json')
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table)
-
-
-@cat.command()
-@click.option('-h', nargs=1, help=h_column_help)
-def health(h):
-    try:
-        response = base.es.cat.health(h=h, format='json')
-        table = base.draw_table(response)
-    except Exception as e:
-        click.echo(e)
-    else:
-        click.echo(table)
-
-
-@cat.command()
+@cat.command('nodeattrs', short_help=nodeattrs_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def nodeattrs(h):
     try:
@@ -118,7 +140,7 @@ def nodeattrs(h):
         click.echo(table)
 
 
-@cat.command()
+@cat.command('nodes', short_help=nodes_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def nodes(h):
     try:
@@ -134,7 +156,7 @@ def nodes(h):
 
 
 
-@cat.command('recovery', short_help='recovery is a view of shard replication')
+@cat.command('recovery', short_help=recovery_help)
 @click.option('--index', nargs=1, help=index_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 @click.option('--format', default='mb', help=format_column_help)
@@ -147,7 +169,7 @@ def recovery(index,format,h):
     else:
         click.echo(table)
 
-@cat.command()
+@cat.command('repositories', short_help=repositories_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def repositories(h):
     try:
@@ -161,7 +183,7 @@ def repositories(h):
     else:
         click.echo(table)
 
-@cat.command('segments', short_help='The segments command is the detailed view of Lucene segments per index.')
+@cat.command('segments', short_help=segments_help)
 @click.option('--index', nargs=1, help=index_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def segments(index,h):
@@ -176,7 +198,7 @@ def segments(index,h):
     else:
         click.echo(table)
 
-@cat.command('shards', short_help='The shards command is the detailed view of what nodes contain which shards.')
+@cat.command('shards', short_help=shards_help)
 @click.option('--index', nargs=1, help=index_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def shards(index,h):
@@ -192,7 +214,7 @@ def shards(index,h):
         click.echo(table)
 
 
-@cat.command()
+@cat.command('snapshots', short_help=snapshots_help)
 @click.option('--repository', nargs=1, help=repository_column_help)
 @click.option('-h', nargs=1, help=h_column_help)
 def snapshots(repository,h):
