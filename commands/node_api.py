@@ -1,6 +1,13 @@
 import base
 import click
 
+#COLUMN HELPS
+
+#COMMAND HELPS
+info_help = 'The cluster nodes info API allows to retrieve one or more (or all) of the cluster nodes information'
+stats_help = 'The cluster nodes stats API allows to retrieve one or more (or all) of the cluster nodes statistics.'
+
+
 @click.group()
 def node():
     '''
@@ -8,7 +15,7 @@ def node():
     '''
     pass
 
-@node.command()
+@node.command('info', short_help=info_help)
 def info():
     try:
         response = base.es.nodes.info()
@@ -17,7 +24,7 @@ def info():
     else:
         base.pretty_print(response)
 
-@node.command()
+@node.command('stats', short_help=stats_help)
 def stats():
     try:
         response = base.es.nodes.stats()
