@@ -22,14 +22,14 @@ fielddata_help = '''Shows information about currently loaded fielddata on a per-
 indices_help = 'The indices command provides a cross-section of each index.'
 allocation_help = 'Information about shard allocation'
 count_help = 'Count of the documents stored in index'
-health_help = ''
-nodeattrs_help = ''
-nodes_help = ''
+health_help = 'Information regarding health of the cluster'
+nodeattrs_help = 'Command shows custom node attributes'
+nodes_help = 'The nodes command shows the cluster topology.'
 recovery_help = 'recovery is a view of shard replication'
-repositories_help=''
+repositories_help='The repositories command shows the snapshot repositories registered in the cluster'
 segments_help='The segments command is the detailed view of Lucene segments per index.'
 shards_help='The shards command is the detailed view of what nodes contain which shards.'
-snapshots_help=''
+snapshots_help='The snapshots command shows all snapshots that belong to a specific repository'
 
 @click.group()
 def cat():
