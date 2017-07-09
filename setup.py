@@ -19,5 +19,6 @@ setup(
     author="Deepanshu Gupta",
     author_email="gupta.deeshu@gmail.com",
     description="Tool for Elasticsearch",
+    utrl="https://github.com/deeshugupta/tes",
     keywords="tes elasticsearch Elasticsearch"
 )
