@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='tes',
@@ -19,6 +19,7 @@ setup(
     author="Deepanshu Gupta",
     author_email="gupta.deeshu@gmail.com",
     description="Tool for Elasticsearch",
-    utrl="https://github.com/deeshugupta/tes",
+    url="https://github.com/deeshugupta/tes",
+    download_url="https://github.com/deeshugupta/tes/archive/v1.0.tar.gz",
     keywords="tes elasticsearch Elasticsearch"
 )
